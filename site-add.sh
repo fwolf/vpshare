@@ -1,6 +1,6 @@
 #! /bin/bash
 #====================================================================
-#	db-add.sh
+#	site-add.sh
 #
 #	Copyright (c) 2013, Fwolf <fwolf.aide+vpshare@gmail.com>
 #	All rights reserved.
@@ -8,15 +8,14 @@
 #	Distributed under the MIT License.
 #	http://opensource.org/licenses/mit-license
 #
-#	New db for user.
-#	Root user must have admin priv of db configed in /root/.my.cnf
+#	New nginx & php-fpm config for user domain.
 #====================================================================
 
 
 # Print usage message
 function PrintUsage {
 	cat <<EOF
-Usage: `basename $0` DBNAME PASS
+Usage: `basename $0` USER DOMAIN
 
 EOF
 } # end of func PrintUsage
@@ -41,14 +40,19 @@ if [ 'root' != `whoami` ]; then
 fi
 
 
-# Create db
-if [ 0 -eq `mysql -B -e 'SHOW DATABASES;' | grep $1 | wc -l` ]; then
-	mysql -e "CREATE USER '$1'@localhost IDENTIFIED BY  '$2';"
-	mysql -e "CREATE DATABASE $1 DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;"
-	mysql -e "GRANT ALL PRIVILEGES ON \`$1\` . * TO  '$1'@localhost;"
-else
-	echo Db already exists.
-fi
+# Create nginx & php-fpm config
+# Do NOT check duplicate run, once config file created, can only modify manually
+F=/home/fwolf/conf/php-fpm-$1.conf
+cat ${P2R}template/php-fpm-user.conf | sed "s/{USER}/$1/g" > $F
+chown fwolf:vpshare $F
+ln -s $F /etc/php/fpm.d/
+
+F=/home/fwolf/conf/nginx-$1-$2.conf
+cat ${P2R}template/nginx-user-domain.conf | sed "s/{USER}/$1/g" | sed "s/{DOMAIN}/$2/g" > $F
+chown fwolf:vpshare $F
+ln -s $F /etc/nginx/vhosts/
+
+systemctl restart nginx php-fpm
 
 
 #====================================================================
