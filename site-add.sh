@@ -46,11 +46,13 @@ F=/home/fwolf/conf/php-fpm-$1.conf
 cat ${P2R}template/php-fpm-user.conf | sed "s/{USER}/$1/g" > $F
 chown fwolf:vpshare $F
 ln -s $F /etc/php/fpm.d/
+ln -s $F /home/$1/conf/
 
 F=/home/fwolf/conf/nginx-$1-$2.conf
 cat ${P2R}template/nginx-user-domain.conf | sed "s/{USER}/$1/g" | sed "s/{DOMAIN}/$2/g" > $F
 chown fwolf:vpshare $F
 ln -s $F /etc/nginx/vhosts/
+ln -s $F /home/$1/conf/
 
 systemctl restart nginx php-fpm
 
