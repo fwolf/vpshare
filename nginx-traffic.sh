@@ -62,6 +62,7 @@ function Count {
 
 
 # Parse param and call Count
+echo ============================== [`date +"%Y-%m-%d"`] ==============================
 echo "  USER          HTTP REQUEST              HTTP TRAFFIC (today/yestaday)"
 if [[ $# -lt 1 ]]; then
 	# All user
@@ -75,6 +76,7 @@ else
 	# Single user
 	Count $1
 fi
+echo
 
 
 #====================================================================
