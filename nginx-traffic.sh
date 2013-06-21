@@ -33,7 +33,7 @@ function Count {
 	U=`printf "%-10s" $1`
 
 	F=/home/$1/log/access.log
-	F1=/home/$1/log/access.log.1
+	F1=/home/$1/log/access.log-`date +"%Y%m%d"`
 	CNT_PV=0
 	CNT_PV1=0
 	CNT_TFK=0
