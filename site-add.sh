@@ -2,7 +2,7 @@
 #====================================================================
 #	site-add.sh
 #
-#	Copyright (c) 2013, Fwolf <fwolf.aide+vpshare@gmail.com>
+#	Copyright (c) 2013-2016 Fwolf <fwolf.aide+vpshare@gmail.com>
 #	All rights reserved.
 #
 #	Distributed under the MIT License.
@@ -45,7 +45,7 @@ fi
 F=/home/fwolf/conf/php-fpm-$1.conf
 cat ${P2R}template/php-fpm-user.conf | sed "s/{USER}/$1/g" > $F
 chown fwolf:vpshare $F
-ln -s $F /etc/php/fpm.d/
+ln -s $F /etc/php/php-fpm.d/
 ln -s $F /home/$1/conf/
 
 F=/home/fwolf/conf/nginx-$1-$2.conf
